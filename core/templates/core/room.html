@@ -1,23 +1,55 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-<h1>
-    {{rooms.name}}
-</h1>
+<style>
+  .room-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
+</style>
 
-<p>{{room.description}}</p>
+<div class="room-container">
+  <div>
+    <h1>{{rooms.name}}</h1>
 
-<div class="comment-wrapper">
-    <h3>Chat</h3>
-    <hr>
-    {% for message in messages %}
+    <p>{{room.description}}</p>
 
-        <div>
-            <small>@{{message.user}} {{message.created|timesince}} ago</small>
-            <p>{{message.body}}</p>
-        </div>
+    <div class="comment-wrapper">
+      <h3>Chat</h3>
+      <hr />
+      {% for message in grpmessages %}
+
+      <div>
+        {% if request.user == message.user %}
+        <a href="{% url 'delete-message' message.id %}">Delete</a>
+        {% endif %}
+        <small>@{{message.user}} {{message.created|timesince}} ago</small>
+        <p>{{message.body}}</p>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="comment-form">
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="body" placeholder="message" />
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <div>
+    <h3>Members</h3>
+    <hr />
+    {% for member in members %}
+
+    <div>
+      <p>@{{member}}</p>
+    </div>
 
     {% endfor %}
+  </div>
 </div>
 
 {% endblock %}
