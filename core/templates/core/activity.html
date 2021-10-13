@@ -3,18 +3,19 @@
       <h2>Recent Activities</h2>
     </div>
     {% for message in grpmessages %}
+    {% if request.user != message.user %}
     <div class="activities__box">
       <div class="activities__boxHeader roomListRoom__header">
         <a href="{% url 'profile' message.user.id %}" class="roomListRoom__author">
           <div class="avatar avatar--small">
-            <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+            <img src="{{message.user.avatar.url}}" />
           </div>
           <p>
-            @{{message.user}}
+            @{{message.user.username}}
             <span>{{message.created|timesince}} ago</span>
           </p>
         </a>
-        {% if request.user == message.user %}
+        <!-- {% if request.user == message.user %}
         <div class="roomListRoom__actions">
           <a href="{% url 'delete-message' message.id %}">
             <svg
@@ -31,7 +32,7 @@
             </svg>
           </a>
         </div>
-        {% endif %}
+        {% endif %} -->
       </div>
       <div class="activities__boxContent">
         <p>
@@ -43,5 +44,6 @@
         </div>
       </div>
     </div>
+    {% endif %}
     {% endfor %}
   </div>

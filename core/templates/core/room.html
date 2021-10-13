@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+
+{% block content %}
 <main class="profile-page layout layout--2">
   <div class="container">
     <!-- Room Start -->
@@ -79,7 +81,7 @@
             <p>Hosted By</p>
             <a href="{ url 'profile' room.host.id %}" class="room__author">
               <div class="avatar avatar--small">
-                <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+                <img src="{{room.host.avatar.url}}" />
               </div>
               <span>@{{room.host.username}}</span>
             </a>
@@ -101,10 +103,10 @@
                   <a href="{% url 'delete-message' message.id %}" class="thread__authorInfo">
                     <div class="avatar avatar--small">
                       <img
-                        src="https://randomuser.me/api/portraits/men/37.jpg"
+                        src="{{message.user.avatar.url}}"
                       />
                     </div>
-                    <span>@{{message.user}}</span>
+                    <span>@{{message.user.username}}</span>
                   </a>
                   <span class="thread__date">{{message.created|timesince}} ago</span>
                 </div>
@@ -136,8 +138,9 @@
         </div>
       </div>
       <div class="room__message">
-        <form action="#">
-          <input name="" placeholder="Write your message here..." />
+        <form action="" method="POST">
+          {% csrf_token %}
+          <input  name="body" placeholder="message" />
         </form>
       </div>
     </div>
@@ -152,11 +155,11 @@
         {% for member in members %}
         <a href="{% url 'profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
-            <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+            <img src="{{member.avatar.url}}" />
           </div>
           <p>
-            {{member}}
-            <span>@{{member}}</span>
+            {{member.name}}
+            <span>@{{member.username}}</span>
           </p>
         </a>
         {% endfor %}

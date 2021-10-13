@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
@@ -16,9 +14,9 @@ def registerPage(request):
     if request.user.is_authenticated:
         return redirect('home')
 
-    form = UserCreationForm()
+    form = registerForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = registerForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -38,15 +36,15 @@ def loginPage(request):
         return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             messages.error(request,"User Not Found")
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request,user)
@@ -70,9 +68,9 @@ def home(request):
         Q(description__icontains=q)
         )
     
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:4]
     roomCount = rooms.count()
-    grpmessages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    grpmessages = Message.objects.filter(Q(room__topic__name__icontains=q))[0:4]
     context={'rooms':rooms,'topics':topics,'roomCount':roomCount,'grpmessages':grpmessages}
     return render(request,'core/home.html',context)
 
@@ -169,9 +167,23 @@ def updateUser(request):
     user = request.user
     form = UserForm(instance=user)
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = UserForm(request.POST,request.FILES,instance=user)
         if form.is_valid():
             form.save()
         return redirect('profile',pk=user.id)
     context={'form':form}
     return render(request,'core/edit-user.html',context)
+
+@login_required(login_url='login')
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    context={'topics':topics}
+    return render(request,'core/topics.html',context)
+
+@login_required(login_url='login')
+def activityPage(request):
+    grpmessages = Message.objects.all()[0:4]
+    context={'grpmessages':grpmessages}
+    return render(request,'core/mobactivity.html',context)
+
