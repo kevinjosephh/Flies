@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from cloudinary.forms import cl_init_js_callbacks  
 
 from .models import *
 from .forms import *
