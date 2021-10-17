@@ -7,7 +7,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=50,null=True)
     email = models.EmailField(unique=True)
     bio = models.TextField(null=True)
-    avatar = CloudinaryField(null=True,default_image="https://res.cloudinary.com/ds9nrbzxv/image/upload/d_v1634463409/gfzavj7q1wwzrw8mq8rx.svg")
+    avatar = CloudinaryField(null=True,default="avatar.svg")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS= ['username']
