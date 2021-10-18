@@ -60,6 +60,7 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
+    
 @login_required(login_url='login')
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
