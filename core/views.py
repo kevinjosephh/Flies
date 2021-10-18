@@ -60,7 +60,7 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
-
+@login_required(login_url='login')
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     rooms = Room.objects.filter(
@@ -93,7 +93,7 @@ def room(request,pk):
     context={'room':room,'grpmessages':grpmessages,'members':members}
     return render(request,'core/room.html',context)
 
-
+@login_required(login_url='login')
 def userProfile(request,pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
