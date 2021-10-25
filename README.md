@@ -4,7 +4,7 @@
 
 > Live URL: https://flies-room.herokuapp.com/
 ## Description
-Public Room Web-Application. Were users can join a Room, Create a Room and Open up a new topic
+Public Room Web-Application. In which users can join a Room, Create a Room and Open up a new topic
 
 ### Dependencies
 
@@ -13,7 +13,7 @@ All the required dependencies are mention in requirements.txt file
 ### Installing
 --> Clone the repository using the command below :
 ```bash
-git clone https://github.com/kevinjosephh/Management.git
+git clone https://github.com/kevinjosephh/Flies.git
 
 ```
 --> Move into the directory where we have the project files : 
